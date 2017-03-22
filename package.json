@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "jquery-no-dom": "git+https://github.com/wchang28/jquery-no-dom.git"
+    "jquery-no-dom": "git+https://github.com/wchang28/jquery-no-dom.git",
+    "sqlite3": "^3.1.8"
   }
 }
