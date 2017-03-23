@@ -3,7 +3,30 @@
 
 var $ = require('jquery-no-dom');
 
+var sqlite3 = require('sqlite3').verbose();  
+var db = new sqlite3.Database('abcd');  
 
+function main() {  
+// db.serialize(function() {  
+//   //db.run("CREATE TABLE user (id INT, dt TEXT)");  
+  
+//   var stmt = db.prepare("INSERT INTO user VALUES (?,?)");  
+//   for (var i = 10; i < 20; i++) {  
+    
+//       var d = new Date();  
+//       var n = d.toLocaleTimeString();  
+//       stmt.run(i, n);  
+//   }  
+//   stmt.finalize();  
+  
+//   db.each("SELECT id, dt FROM user", function(err, row) {  
+//       console.log("User id : "+row.id, row.dt);  
+//   });  
+// });  
+  
+// db.close();  
+
+// return 0
 
 var baseURL = 'http://query.yahooapis.com/v1/public/yql?q=select%20%2a%20from';
 
@@ -43,17 +66,29 @@ $.ajax({
   url: testURLTres,
   dataType: "json",
   success: function(data) {
-  	console.log(data.query.results);
-  	// var totalDiv = 0;
-  	// $.each(data.query.results.quote, function(idx, ele) {
-   //    //console.log(ele.Dividends);
-   //    totalDiv += parseFloat(ele.Dividends);
-  	// });
-  	// console.log(totalDiv);
+  	//console.log(data.query.results.quote);
+    db.serialize(function() {  
+      db.run("CREATE TABLE prices (id INT, dt TEXT, symbol TEXT, close TEXT)");  
+  
+      var stmt = db.prepare("INSERT INTO prices VALUES (?,?,?,?)");
 
+      $.each(data.query.results.quote, function(idx, ele) {
+          stmt.run(idx, ele.Date, ele.Symbol, ele.Close);
+      });
+
+      stmt.finalize();  
+  
+      db.each("SELECT id, dt, symbol, close FROM prices", function(err, row) {  
+          console.log("Prices : "+row.id, row.dt, row.symbol, row.close);  
+      });  
+    });  
+    db.close();  
   }
 });
 
+}
+
+main();
 
 	
 
