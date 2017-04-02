@@ -1,15 +1,11 @@
 
-# pylint: disable=invalid-name
-
 import sqlite3
-import numpy as np
-import pandas as pd
 
-conn = sqlite3.connect('abcd')
+conn = sqlite3.connect('pxdb')
 
 c = conn.cursor()
 
-c.execute('SELECT * FROM prices')
-print c.fetchall()
+c.execute('SELECT * FROM hist_prices_uniq')
+print(c.fetchall())
 
 conn.close()
