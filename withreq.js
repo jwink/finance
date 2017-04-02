@@ -1,4 +1,9 @@
 
+/*
+have a realtime process and a historical process
+*/
+
+
 
 var request = require('request');
 
