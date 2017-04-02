@@ -2,19 +2,16 @@
 var $ = require('jquery-no-dom');
 var sqlite3 = require('sqlite3').verbose();  
 var db = new sqlite3.Database('pxdb');
+var json2csv = require('json2csv');
+var fs = require('fs');
 
 var outPutJSON = {};
-
-
-
 
 function cleanDB() {
     db.serialize(function() {  
         db.run("DROP TABLE IF EXISTS hist_prices_uniq");  
         db.run("CREATE TABLE IF NOT EXISTS hist_prices_uniq (date TEXT, symbol TEXT, price REAL)");  
     });  
-    
-    //db.close();  
 }
 
 function populateUniq(dayObj) {
@@ -25,8 +22,7 @@ function populateUniq(dayObj) {
       $.each(dayObj, function(key, value) {
           $.each(value, function(key2, value2) {
               stmt.run(key, key2, value2);
-          });
-          
+          });   
       });
 
       stmt.finalize(selectValuesUniq);  
@@ -48,12 +44,9 @@ selectValues = function() {
                     outPutJSON[ele.date][ele.symbol] = ele.price;
                 }
             });
-            //console.log(Object.keys(outPutJSON).length);
             populateUniq(outPutJSON);
         });  
     });  
-    //db.close();
-      
 }
 
 selectValuesUniq = function() {
@@ -61,13 +54,16 @@ selectValuesUniq = function() {
   
       db.all("SELECT date, symbol, price FROM hist_prices_uniq", function(err, rows) {
             console.log(rows);
-        });  
+            var fields = ['date', 'symbol', 'price'];
+            var csv = json2csv({ data: rows, fields: fields, quotes: '' });
+ 
+            fs.writeFile('output.csv', csv, function(err) {
+                if (err) throw err;
+                console.log('file saved');
+            });
+      });  
     });  
-    //db.close();
-      
 }
    
 cleanDB();  
 selectValues();
-
-//selectValuesUniq();

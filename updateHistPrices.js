@@ -69,3 +69,5 @@ updateHistPx('MSFT');
 updateHistPx('PFE');
 updateHistPx('%5eGSPC');
 updateHistPx('TWO');
+updateHistPx('%5eTNX');
+updateHistPx('%5eTYX');
