@@ -53,14 +53,43 @@ selectValuesUniq = function() {
     db.serialize(function() {  
   
       db.all("SELECT date, symbol, price FROM hist_prices_uniq", function(err, rows) {
-            console.log(rows);
+            //console.log(rows);
+            var pivotedObj = {};
+            $.each(rows, function(idx, ele) {
+                if (pivotedObj[ele.date] == undefined) {
+                    pivotedObj[ele.date] = {};
+                    pivotedObj[ele.date][ele.symbol] = ele.price;
+                } else {
+                    pivotedObj[ele.date][ele.symbol] = ele.price;
+                }
+            });
+            //console.log(pivotedObj);
+            var pivForCSV = [];
+            var allSymbols = {};
+            $.each(pivotedObj, function(key, value) {
+                var tempObj = {};
+                tempObj["date"] = key;
+                $.each(value, function(key2, value2) {
+                   tempObj[key2] = value2;
+                   allSymbols[key2] = "symbol";
+                });
+                pivForCSV.push(tempObj);
+            });
+            console.log(pivForCSV);
+            var symFields = Object.keys(allSymbols);
             var fields = ['date', 'symbol', 'price'];
             var csv = json2csv({ data: rows, fields: fields, quotes: '' });
+            var csvDos = json2csv({data: pivForCSV, quotes:''});
+            
  
             fs.writeFile('output.csv', csv, function(err) {
                 if (err) throw err;
                 console.log('file saved');
             });
+            fs.writeFile('output2.csv', csvDos, function(err) {
+                if (err) throw err;
+                console.log('file saved dos');
+            });            
       });  
     });  
 }
