@@ -7,7 +7,7 @@ module.exports.histCall =  function(currSymbol, currStartDate) {
     var baseURL = 'https://query.yahooapis.com/v1/public/yql?q=';
     var endURLOptions = '&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=';
     var histPricesSection = 'select * from yahoo.finance.historicaldata where ';
-    var symbolInfo = 'symbol = "' + currSymbol + '"';
+    var symbolInfo = 'symbol = "' + unescape(currSymbol) + '"';
     var startDate = ' and startDate = "' + currStartDate + '" and ';
     var endDate = 'endDate = "' + config.config.currEndDate +  '"';
     request(baseURL

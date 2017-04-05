@@ -15,7 +15,7 @@ module.exports.insertValues = function(data) {
       stmt.finalize();  
   
     });  
-    db.close();  
+    //db.close();  
 }
   
 
