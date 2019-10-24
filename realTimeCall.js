@@ -13,6 +13,7 @@ function realTimeCall(currSymbol) {
         +endURLOptions, function(error, response, body) {
             var data = JSON.parse(body);
             console.log(unescape(currSymbol), data.query.results.quote.LastTradePriceOnly);
+            console.log(unescape(currSymbol), data.query.results.quote);
         });
 }
 
@@ -27,3 +28,5 @@ realTimeCall('%5eTYX');
 realTimeCall('IVR');
 realTimeCall('VZ');
 realTimeCall('%5eFVX');
+realTimeCall('MTGE');
+

@@ -10,6 +10,12 @@ module.exports.histCall =  function(currSymbol, currStartDate) {
     var symbolInfo = 'symbol = "' + unescape(currSymbol) + '"';
     var startDate = ' and startDate = "' + currStartDate + '" and ';
     var endDate = 'endDate = "' + config.config.currEndDate +  '"';
+    console.log(baseURL
+        +escape(histPricesSection)
+        +escape(symbolInfo)
+        +escape(startDate)
+        +escape(endDate)
+        +endURLOptions);
     request(baseURL
         +escape(histPricesSection)
         +escape(symbolInfo)
@@ -19,7 +25,9 @@ module.exports.histCall =  function(currSymbol, currStartDate) {
             //console.log('error:', error); // Print the error if one occurred 
             //console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received 
             var data = JSON.parse(body);
-            console.log(data.query.results.quote);
+            console.log(data.query);
+            //console.log(data.query.results.quote);
+            console.log(currSymbol);
             insert.insertValues(data);
         });
 }
